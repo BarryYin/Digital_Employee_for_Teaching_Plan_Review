@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>历史记录 - 英语作文助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#667eea" class="bi bi-book" viewBox="0 0 16 16">
+                    <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.815V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.815C10.354 13.248 9.271 13.118 8 13.118c-1.272 0-2.354.13-3.288.815V2.687zM8 12.882c1.358 0 2.524.189 3.466.538.893.34 1.756.646 2.45.995v-2.257c-.851-.284-1.588-.62-2.15-.956-.562-.336-1.179-.557-1.828-.698V12.882zm0-8.721c-1.167 0-2.239.056-3.268.185-.95.126-1.719.363-2.34 1.035v2.257c.621-.672 1.38-1.01 2.233-1.184.852-.173 1.805-.273 2.896-.273s2.044.1 2.896.273c.853.174 1.612.512 2.233 1.184v-2.257c-.621-.672-1.39-.909-2.34-1.035C10.239 4.238 9.168 4.182 8 4.182z"/>
+                </svg>
+                英语作文助手
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/history">历史记录</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header fade-in-up">
+            <h1>我的作文历史</h1>
+            <p class="text-muted" style="font-size: 1.1rem;">查看和回顾您的所有英语作文及评审结果</p>
+        </div>
+
+        {% if essays %}
+        <div class="history-grid">
+            {% for essay in essays %}
+            <div class="card fade-in-up" style="animation-delay: {{ loop.index0 * 100 }}ms;">
+                <div class="card-header">
+                    <div class="score-tag">{{ essay.score }}分</div>
+                    <span class="text-sm opacity-80">{{ essay.date }}</span>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ essay.topic }}</h5>
+                    {% if essay.title %}
+                    <div class="mb-2 text-primary font-semibold">{{ essay.title }}</div>
+                    {% endif %}
+                    <div class="card-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#667eea" class="bi bi-bookmark-check" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                                <path d="M8 14l4-4H6a.5.5 0 0 1-.5-.5V1a.5.5 0 0 1 1 0v8.5l4 4z"/>
+                            </svg>
+                            {{ essay.grade }}
+                        </span>
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#667eea" class="bi bi-file-text" viewBox="0 0 16 16">
+                                <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/>
+                            </svg>
+                            {{ essay.word_count }} 词
+                        </span>
+                    </div>
+                    <div class="card-preview">{{ essay.content }}</div>
+                    <div class="d-flex gap-2">
+                        <a href="/history/detail/{{ essay.id }}" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                            </svg>
+                            查看详情
+                        </a>
+                        <a href="/" class="btn btn-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                                <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                            </svg>
+                            写新作文
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state fade-in-up">
+            <svg xmlns="http://www.w3.org/2000/svg" class="empty-state-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            <h3>暂无作文记录</h3>
+            <p>您还没有提交过任何英语作文</p>
+            <a href="/" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                </svg>
+                开始写作文
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <div class="container text-center">
+            <p class="text-muted" style="margin-bottom: 0;">© 2025 英语作文助手 - 助力学生英语写作能力提升</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化动画
+            document.querySelectorAll('.fade-in-up').forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 100 + (index * 100));
+            });
+            
+            // 为卡片添加悬停效果
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 12px 35px rgba(0, 0, 0, 0.2)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+                });
+            });
+            
+            // 为按钮添加悬停效果
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    if (this.classList.contains('btn-primary')) {
+                        this.style.boxShadow = '0 8px 20px rgba(102, 126, 234, 0.3)';
+                    } else {
+                        this.style.boxShadow = '0 8px 20px rgba(160, 174, 192, 0.3)';
+                    }
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

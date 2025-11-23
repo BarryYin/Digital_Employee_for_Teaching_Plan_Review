@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>评审结果 - 英语作文助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#667eea" class="bi bi-book" viewBox="0 0 16 16">
+                    <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.815V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.815C10.354 13.248 9.271 13.118 8 13.118c-1.272 0-2.354.13-3.288.815V2.687zM8 12.882c1.358 0 2.524.189 3.466.538.893.34 1.756.646 2.45.995v-2.257c-.851-.284-1.588-.62-2.15-.956-.562-.336-1.179-.557-1.828-.698V12.882zm0-8.721c-1.167 0-2.239.056-3.268.185-.95.126-1.719.363-2.34 1.035v2.257c.621-.672 1.38-1.01 2.233-1.184.852-.173 1.805-.273 2.896-.273s2.044.1 2.896.273c.853.174 1.612.512 2.233 1.184v-2.257c-.621-.672-1.39-.909-2.34-1.035C10.239 4.238 9.168 4.182 8 4.182z"/>
+                </svg>
+                英语作文助手
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/history">历史记录</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header fade-in-up">
+            <h1>作文评审结果</h1>
+            <p class="text-muted" style="font-size: 1.1rem;">感谢您的提交！以下是智能评审结果</p>
+        </div>
+
+        <!-- 评分展示卡片 -->
+        <div class="card fade-in-up" style="animation-delay: 0.2s;">
+            <div class="card-header">
+                <div class="d-flex align-items-center gap: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                        <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                    </svg>
+                    评分与评价
+                </div>
+                <span class="text-sm opacity-80">{{ essay_date }}</span>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center">
+                    <div class="score-badge">
+                        {{ score }}分
+                    </div>
+                    
+                    <div class="score-level">
+                        <div class="level-title">{{ level }}</div>
+                        <div class="level-description">{{ level_description }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 整体评价卡片 -->
+        <div class="content-section fade-in-up" style="animation-delay: 0.4s;">
+            <h4>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#667eea" class="bi bi-chat-square-text" viewBox="0 0 16 16">
+                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                </svg>
+                整体评价
+            </h4>
+            <p>{{ overall_comment }}</p>
+        </div>
+
+        <!-- 改进建议卡片 -->
+        <div class="content-section fade-in-up" style="animation-delay: 0.6s;">
+            <h4>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#667eea" class="bi bi-lightbulb" viewBox="0 0 16 16">
+                    <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 0 1H8v.5a.5.5 0 0 1-1 0V2.5H6.5a.5.5 0 0 1 0-1H7V.5a.5.5 0 0 1 .5-.5z"/>
+                </svg>
+                改进建议
+            </h4>
+            <ul class="suggestions-list">
+                {% for suggestion in suggestions %}
+                <li class="suggestion-item">
+                    <span class="suggestion-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        </svg>
+                    </span>
+                    <span>{{ suggestion }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- 作文内容卡片 -->
+        <div class="card fade-in-up" style="animation-delay: 0.8s;">
+            <div class="card-header">
+                <div class="d-flex align-items-center gap: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-text" viewBox="0 0 16 16">
+                        <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/>
+                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
+                    </svg>
+                    您的作文
+                </div>
+                <span class="text-sm opacity-80">{{ word_count }} 词</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title mb-3" style="color: #2d3748;">{{ topic }}</h5>
+                <div class="essay-content-review">{{ essay_content }}</div>
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="text-center fade-in-up" style="animation-delay: 1s; margin-top: 2rem;">
+            <a href="/" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                </svg>
+                写新作文
+            </a>
+            <a href="/history" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-history" viewBox="0 0 16 16">
+                    <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.913l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.172a7.957 7.957 0 0 1 .434 1.21.75 7.028 0 0 0-.183.645l-.985.172zm-.131 1.538c-.084.13-.16.263-.234.398l.936.267a8.073 8.073 0 0 1-.481.07 8.93 8.93 0 0 1-.024.063l-.93-.26a7.084 7.084 0 0 0-.243-.403zm-.93 1.452l-.54-1.113c.18-.086.353-.19.528-.301l.905.403a7.959 7.959 0 0 1-.403.432l-.54 1.113a7.097 7.097 0 0 0-.188.211zm-.524 1.325L.173 8.08a8.019 8.019 0 0 1 4.347-.945l-.68.68a7.99 7.99 0 0 0-.443.442 7.088 7.088 0 0 0-.274.372l-.548 1.108zm-2.998 1.432A7.085 7.085 0 0 0 5.205 16a8.031 8.031 0 0 1-1.47-1.148l.71-1.282A6.98 6.98 0 0 0 6.66 14.5l.652-.326a6.965 6.965 0 0 1-.415-.413l-.652.326zm-1.867-1.492l-.658.336a6.965 6.965 0 0 0-.281.302l-.658-.336a6.965 6.965 0 0 1-.281-.302 6.98 6.98 0 0 1 .399-.499l.606-.606a7.987 7.987 0 0 0-.415-.07 7.95 7.95 0 0 0-.114.07l-.35.35a8.073 8.073 0 0 1-.203.146 8.907 8.907 0 0 1-.146-.203l.35-.35z"/>
+                </svg>
+                查看历史记录
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container text-center">
+            <p class="text-muted" style="margin-bottom: 0;">© 2025 英语作文助手 - 助力学生英语写作能力提升</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

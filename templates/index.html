@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英语作文助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#667eea" class="bi bi-book" viewBox="0 0 16 16">
+                    <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.815V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.815C10.354 13.248 9.271 13.118 8 13.118c-1.272 0-2.354.13-3.288.815V2.687zM8 12.882c1.358 0 2.524.189 3.466.538.893.34 1.756.646 2.45.995v-2.257c-.851-.284-1.588-.62-2.15-.956-.562-.336-1.179-.557-1.828-.698V12.882zm0-8.721c-1.167 0-2.239.056-3.268.185-.95.126-1.719.363-2.34 1.035v2.257c.621-.672 1.38-1.01 2.233-1.184.852-.173 1.805-.273 2.896-.273s2.044.1 2.896.273c.853.174 1.612.512 2.233 1.184v-2.257c-.621-.672-1.39-.909-2.34-1.035C10.239 4.238 9.168 4.182 8 4.182z"/>
+                </svg>
+                英语作文助手
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history">历史记录</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header fade-in-up">
+            <h1>英语作文助手</h1>
+            <p class="text-muted" style="font-size: 1.1rem;">选择您的年级，系统将为您生成作文题目。完成作文后，提交进行智能评审。</p>
+        </div>
+
+        <div class="card fade-in-up" style="animation-delay: 0.2s;">
+            <div class="card-body">
+                <h5 class="card-title" style="color: #2d3748; font-weight: bold;">选择您的年级</h5>
+                <div class="mb-3">
+                    <select id="grade-select" class="form-select">
+                        <option value="七年级">七年级</option>
+                        <option value="八年级">八年级</option>
+                        <option value="九年级">九年级</option>
+                        <option value="中考">中考</option>
+                        <option value="高一">高一</option>
+                        <option value="高二">高二</option>
+                        <option value="高三">高三</option>
+                        <option value="高考">高考</option>
+                    </select>
+                </div>
+                <button id="generate-topic-btn" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightbulb" viewBox="0 0 16 16">
+                        <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 0 1H8v.5a.5.5 0 0 1-1 0V2.5H6.5a.5.5 0 0 1 0-1H7V.5a.5.5 0 0 1 .5-.5z"/>
+                    </svg>
+                    生成作文题目
+                </button>
+            </div>
+        </div>
+
+        <div id="topic-container" class="mt-4 fade-in-up" style="animation-delay: 0.4s; display: {{ 'block' if current_topic else 'none' }}">
+            <div class="topic-box">
+                <div class="d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-text" viewBox="0 0 16 16" style="margin-right: 15px; color: #667eea;">
+                        <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/>
+                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
+                    </svg>
+                    <h4 style="color: #2d3748; font-weight: bold;">作文题目</h4>
+                </div>
+                <p id="topic-content" class="mt-3 font-weight-bold" style="font-size: 1.2rem; color: #2d3748; line-height: 1.6;">{{ current_topic }}</p>
+            </div>
+        </div>
+
+        <div id="essay-container" class="mt-4 fade-in-up" style="animation-delay: 0.6s; display: {{ 'block' if current_topic else 'none' }}">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: #2d3748; font-weight: bold;">请输入您的作文</h5>
+                    <p class="text-muted" style="margin-bottom: 1.5rem;">最少需要 50 个单词以进行有效评审</p>
+                    <form id="essay-form" action="/submit_essay" method="POST">
+                        <div class="mb-3">
+                            <textarea id="essay-content" name="content" class="form-control" placeholder="请在这里输入您的英语作文内容。请确保至少包含50个单词以进行有效评审。"></textarea>
+                        </div>
+                        <div class="word-counter" id="word-counter">
+                            字数统计：<span id="word-count" style="color: #667eea; font-weight: bold;">0</span> 个单词
+                            <span id="word-remaining" class="text-danger">还需要 50 个单词</span>
+                        </div>
+                        <div class="mt-3 d-flex justify-content-end">
+                            <button type="submit" id="submit-btn" class="btn btn-primary" disabled>
+                                
+                                提交
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container text-center">
+            <p class="text-muted" style="margin-bottom: 0;">© 2025 英语作文助手 - 助力学生英语写作能力提升</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 生成作文题目
+        document.getElementById('generate-topic-btn').addEventListener('click', async function() {
+            const grade = document.getElementById('grade-select').value;
+            const btn = this;
+            const originalText = btn.innerHTML;
+            
+            // 添加加载效果
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> 正在生成...';
+            
+            try {
+                const response = await fetch('/generate_topic', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'grade': grade
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.topic) {
+                    // 添加动画效果
+                    const topicBox = document.getElementById('topic-container');
+                    const essayBox = document.getElementById('essay-container');
+                    
+                    document.getElementById('topic-content').textContent = result.topic;
+                    
+                    topicBox.style.display = 'block';
+                    topicBox.style.opacity = '0';
+                    topicBox.style.transform = 'translateY(20px)';
+                    topicBox.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    
+                    setTimeout(() => {
+                        topicBox.style.opacity = '1';
+                        topicBox.style.transform = 'translateY(0)';
+                        
+                        // 延迟显示作文输入框
+                        setTimeout(() => {
+                            essayBox.style.display = 'block';
+                            essayBox.style.opacity = '0';
+                            essayBox.style.transform = 'translateY(20px)';
+                            essayBox.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                            
+                            setTimeout(() => {
+                                essayBox.style.opacity = '1';
+                                essayBox.style.transform = 'translateY(0)';
+                            }, 200);
+                        }, 300);
+                    }, 100);
+                    
+                    // 清空之前的作文内容
+                    document.getElementById('essay-content').value = '';
+                    updateWordCount();
+                }
+            } catch (error) {
+                console.error('Error generating topic:', error);
+                alert('生成题目失败，请重试');
+            } finally {
+                // 恢复按钮状态
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // 字数统计
+        const essayContent = document.getElementById('essay-content');
+        const wordCountEl = document.getElementById('word-count');
+        const wordRemainingEl = document.getElementById('word-remaining');
+        const submitBtn = document.getElementById('submit-btn');
+        const wordCounterEl = document.getElementById('word-counter');
+
+        essayContent.addEventListener('input', updateWordCount);
+
+        function updateWordCount() {
+            const content = essayContent.value;
+            // 更准确的单词计数
+            const words = content.trim().split(/\s+/).filter(word => word.length > 0);
+            const count = words.length;
+            const remaining = Math.max(0, 50 - count);
+            
+            // 添加数字变化动画
+            wordCountEl.style.transition = 'all 0.3s ease';
+            wordCountEl.style.transform = 'scale(1.2)';
+            
+            setTimeout(() => {
+                wordCountEl.style.transform = 'scale(1)';
+            }, 200);
+            
+            wordCountEl.textContent = count;
+            wordRemainingEl.textContent = remaining > 0 ? `还需要 ${remaining} 个单词` : '字数满足要求';
+            
+            // 根据字数启用/禁用提交按钮并改变样式
+            if (count >= 50) {
+                submitBtn.disabled = false;
+                wordRemainingEl.classList.remove('text-danger');
+                wordRemainingEl.classList.add('text-success');
+                wordCounterEl.style.backgroundColor = '#e6fffa';
+                wordCounterEl.style.border = '1px solid #99f6e4';
+            } else {
+                submitBtn.disabled = true;
+                wordRemainingEl.classList.remove('text-success');
+                wordRemainingEl.classList.add('text-danger');
+                wordCounterEl.style.backgroundColor = '#f8f9fa';
+                wordCounterEl.style.border = 'none';
+            }
+        }
+
+        // 提交作文时的动画效果
+        document.getElementById('essay-form').addEventListener('submit', function(event) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span> 提交中...';
+        });
+
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化动画
+            document.querySelectorAll('.fade-in-up').forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 100 + (index * 200));
+            });
+            
+            // 检查是否有当前题目
+            const currentTopic = '{{ current_topic }}';
+            if (currentTopic && currentTopic !== 'None') {
+                document.getElementById('topic-container').style.display = 'block';
+                document.getElementById('essay-container').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
