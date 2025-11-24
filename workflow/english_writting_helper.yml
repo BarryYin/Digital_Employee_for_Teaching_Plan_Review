@@ -296,9 +296,9 @@ flowData:
       updatable: false
   - id: spark-llm::858ff33b-16a9-4b33-828a-cb79891c253c
     dragging: false
-    selected: true
+    selected: false
     width: 362
-    height: 166
+    height: 124
     position:
       x: 416.22758894240565
       y: -720.747062305889
@@ -439,7 +439,7 @@ flowData:
         label: 开始
         parentNode: true
         value: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
-      status: success
+      status: ''
       nodeMeta:
         aliasName: 大模型
         nodeType: 基础节点
@@ -481,7 +481,7 @@ flowData:
         appId: 12a0a7e2
         maxTokens: 2048
         temperature: 0.5
-        systemTemplate: |-
+        systemTemplate: |
           ## 角色
           你是一个专业的英语作文练习题目生成器，能够从英文范文中提取主题，为用户量身定制英语写作题目。
 
@@ -491,10 +491,6 @@ flowData:
           1. 生成英文作文题目：
             - 根据用户指定的英语范文，仔细阅读并理解其内容，提取关键信息和核心主题。
             - 确保所生成的题目既具有挑战性又贴近实际，有助于提高用户的英语写作能力。
-
-          ## 限制
-          - 只生成英语作文题目，拒绝回答与英语写作题目无关的话题。
-          - 所输出的内容必须是一个具体的写作题目，不能有其他多余内容。
         model: spark
         serviceId: bm4
         respFormat: 0
@@ -506,7 +502,7 @@ flowData:
     dragging: false
     selected: false
     width: 362
-    height: 165
+    height: 207
     position:
       x: -619.7110968143921
       y: -543.7235943878992
@@ -648,9 +644,9 @@ flowData:
       updatable: false
   - id: spark-llm::6b1316b8-f2df-4130-b2ce-eaf3b62e7af7
     dragging: false
-    selected: false
+    selected: true
     width: 362
-    height: 124
+    height: 166
     position:
       x: -69.1857987095384
       y: -491.89419147471745
@@ -709,7 +705,7 @@ flowData:
         label: 开始
         parentNode: true
         value: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
-      status: ''
+      status: success
       nodeMeta:
         aliasName: 大模型
         nodeType: 基础节点
@@ -783,8 +779,17 @@ flowData:
           "suggestion":"注意改进语法"
           }
           ## 限制
-          - 仅对用户提供的具体作文样本执行审查任务，避免讨论与此无关的话题。
-          - 必须严格按照预设模板输出结果，不得随意更改框架结构。
+          - 必须严格按照"回复示例"输出结果。
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1098,7 +1103,7 @@ flowData:
         label: 开始
         parentNode: true
         value: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
-      status: success
+      status: ''
       nodeMeta:
         aliasName: 知识库
         nodeType: 工具
@@ -1195,7 +1200,7 @@ flowData:
     dragging: false
     selected: false
     width: 362
-    height: 142
+    height: 100
     position:
       x: 415.53623753862087
       y: -944.1755889400029
@@ -1323,7 +1328,7 @@ flowData:
         label: 开始
         parentNode: true
         value: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
-      status: success
+      status: ''
       nodeMeta:
         aliasName: 代码
         nodeType: 工具
@@ -1371,7 +1376,7 @@ flowData:
     dragging: false
     selected: false
     width: 362
-    height: 166
+    height: 124
     position:
       x: -184.8892678507591
       y: -982.8524010922873
@@ -1430,7 +1435,7 @@ flowData:
         label: 开始
         parentNode: true
         value: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
-      status: success
+      status: ''
       nodeMeta:
         aliasName: 文本拼接
         nodeType: 工具
