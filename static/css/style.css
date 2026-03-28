@@ -596,7 +596,7 @@ footer {
     margin-top: 0.25rem;
 }
 
-/* 作文内容样式（review_result.html） */
+/* 教案内容样式（review_result.html） */
 .essay-content-review {
     background: white;
     padding: 1.5rem;
@@ -608,7 +608,7 @@ footer {
     word-break: break-word;
 }
 
-/* 作文内容样式 */
+/* 教案内容样式 */
 .essay-content {
     background: white;
     padding: 2rem;
