@@ -1,0 +1,7 @@
+interface:
+  display_name: "Teaching Plan Review Server"
+  short_description: "Probe and operate the deployed lesson-review site."
+  default_prompt: "Use $teaching-plan-review-server to verify the deployed app and interact with its HTTP routes safely."
+
+policy:
+  allow_implicit_invocation: true

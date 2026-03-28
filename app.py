@@ -27,9 +27,98 @@ def build_suggestions(value):
     if not value:
         return []
 
-    parts = re.split(r'[\n\r]+|(?<=。)|(?<=；)|(?<=;)|(?<=! )|(?<=！)', value)
-    suggestions = [part.strip() for part in parts if part and part.strip()]
-    return suggestions or [value]
+    text = (value or '').strip()
+    if not text:
+        return []
+
+    text = re.sub(r'^```(?:markdown|md)?\s*', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'\s*```$', '', text)
+    text = re.sub(
+        r'(?:^|[\n\r])#{1,6}\s*(?:综合改进建议|改进建议|建议|优先改进建议)\s*',
+        '\n',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r'(?<=[；;。])\s*(?=(?:\d+[\.、)]|[一二三四五六七八九十]+[、.]))',
+        '\n',
+        text,
+    )
+
+    lines = [line.strip() for line in re.split(r'[\n\r]+', text) if line.strip()]
+    suggestions = []
+    current = None
+    has_numbered_items = bool(
+        re.search(r'(^|[\n\r；;\s])(?:\d+[\.、)]|[一二三四五六七八九十]+[、.])\s*', text)
+    )
+    has_bullet_items = bool(re.search(r'(^|[\n\r])\s*[-*+]\s+', text))
+
+    def normalize_suggestion_item(item):
+        cleaned = item.strip()
+        cleaned = re.sub(r'^(?:[-*+]\s+|\d+[\.、)]\s*|[一二三四五六七八九十]+[、.]\s*)', '', cleaned)
+        cleaned = re.sub(r'[*_`#>]+', '', cleaned)
+        cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+        cleaned = re.sub(r'[；;]\s*$', '', cleaned)
+        return cleaned
+
+    for line in lines:
+        if re.fullmatch(r'[-|:\s]+', line):
+            continue
+        if re.match(r'^#{1,6}\s*', line):
+            continue
+
+        is_numbered_item = re.match(r'^(?:\d+[\.、)]\s*|[一二三四五六七八九十]+[、.]\s*)', line)
+        is_bullet_item = re.match(r'^[-*+]\s+', line)
+
+        if is_numbered_item or (is_bullet_item and not has_numbered_items and has_bullet_items):
+            if current:
+                suggestions.append(normalize_suggestion_item(current))
+            current = line
+            continue
+
+        if current:
+            current += ' ' + normalize_suggestion_item(line)
+        else:
+            suggestions.append(normalize_suggestion_item(line))
+
+    if current:
+        suggestions.append(normalize_suggestion_item(current))
+
+    suggestions = [item for item in suggestions if item]
+    if suggestions:
+        return suggestions
+
+    plain_text = re.sub(r'[*_`#>]+', '', text).strip()
+    return [plain_text] if plain_text else []
+
+
+def extract_suggestion_block(text):
+    content = (text or '').strip()
+    if not content:
+        return ''
+
+    patterns = (
+        r'(?:^|\n)#{1,6}\s*(?:[一二三四五六七八九十]+[、.]\s*)?(?:综合改进建议|优先改进建议|改进建议)\s*(.*?)(?=\n(?:---\s*)?\n#{1,6}\s*|\Z)',
+        r'(?:综合改进建议|优先改进建议|改进建议)[：:]\s*(.*?)(?=\n(?:总结|结语|结论)|\Z)',
+    )
+
+    for pattern in patterns:
+        match = re.search(pattern, content, flags=re.S | re.I)
+        if match:
+            return match.group(1).strip()
+
+    return ''
+
+
+def resolve_suggestions(improvement_suggestions, overall_comment=''):
+    suggestions = build_suggestions(improvement_suggestions)
+    fallback_block = extract_suggestion_block(overall_comment)
+    fallback_suggestions = build_suggestions(fallback_block)
+
+    if fallback_suggestions and len(fallback_suggestions) > len(suggestions):
+        return fallback_suggestions
+
+    return suggestions
 
 # 初始化数据库
 def init_db():
@@ -141,7 +230,10 @@ def review_result(essay_id):
                            level=level,
                            level_description=level_description,
                            overall_comment=essay['overall_comment'],
-                           suggestions=build_suggestions(essay['improvement_suggestions']),
+                           suggestions=resolve_suggestions(
+                               essay['improvement_suggestions'],
+                               essay['overall_comment'],
+                           ),
                            lesson_title=essay['title'],
                            lesson_content=essay['content'],
                            word_count=essay['word_count'],
@@ -178,7 +270,10 @@ def history_detail(essay_id):
         return redirect(url_for('history'))
     
     essay = dict(row)
-    essay['suggestions'] = build_suggestions(essay.get('improvement_suggestions'))
+    essay['suggestions'] = resolve_suggestions(
+        essay.get('improvement_suggestions'),
+        essay.get('overall_comment'),
+    )
     
        
     return render_template('history_detail.html', essay=essay)

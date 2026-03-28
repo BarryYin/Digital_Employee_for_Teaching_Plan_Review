@@ -320,6 +320,113 @@ footer {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+.submission-hint {
+    background: linear-gradient(135deg, #eef4ff 0%, #f7f4ff 100%);
+    border: 1px solid rgba(102, 126, 234, 0.18);
+    color: #4a5568;
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
+    line-height: 1.6;
+}
+
+.submission-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(27, 37, 66, 0.54);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    z-index: 1200;
+}
+
+.submission-overlay.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.submission-overlay-card {
+    width: min(100%, 540px);
+    background: linear-gradient(165deg, #ffffff 0%, #f5f7ff 100%);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 24px 80px rgba(24, 39, 75, 0.28);
+    text-align: center;
+    color: #24324a;
+}
+
+.submission-spinner {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    border: 5px solid rgba(102, 126, 234, 0.16);
+    border-top-color: #667eea;
+    animation: spin 0.9s linear infinite;
+}
+
+.submission-eyebrow {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #667eea;
+    margin-bottom: 0.5rem;
+}
+
+.submission-overlay-card h3 {
+    font-size: 1.55rem;
+    font-weight: 700;
+    margin-bottom: 0.85rem;
+    color: #1f2a44;
+}
+
+.submission-stage {
+    color: #4a5568;
+    font-size: 1rem;
+    line-height: 1.7;
+    min-height: 3.4rem;
+    margin-bottom: 1.25rem;
+}
+
+.submission-progress {
+    width: 100%;
+    height: 10px;
+    background: rgba(160, 174, 192, 0.22);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.submission-progress-bar {
+    width: 12%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #667eea 0%, #7f63d2 100%);
+    transition: width 0.8s ease;
+}
+
+.submission-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.95rem;
+    color: #5f6c83;
+    margin-bottom: 0.9rem;
+}
+
+.submission-note {
+    margin-bottom: 0;
+    color: #667085;
+    font-size: 0.95rem;
+}
+
 /* 网格布局优化 */
 .history-grid {
     display: grid;
@@ -469,6 +576,23 @@ footer {
     margin-right: 10px;
 }
 
+@media (max-width: 640px) {
+    .submission-overlay-card {
+        padding: 1.5rem 1.25rem;
+        border-radius: 18px;
+    }
+
+    .submission-overlay-card h3 {
+        font-size: 1.3rem;
+    }
+
+    .submission-meta {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.35rem;
+    }
+}
+
 /* 改进建议列表样式（history_detail.html） */
 .suggestion-list {
     list-style: none;
@@ -559,6 +683,78 @@ footer {
     color: #4a5568;
     line-height: 1.7;
     margin-bottom: 0;
+}
+
+.markdown-content {
+    color: #4a5568;
+    line-height: 1.8;
+    word-break: break-word;
+}
+
+.markdown-content > *:last-child {
+    margin-bottom: 0;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+    color: #24324a;
+    font-weight: 700;
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.markdown-content p,
+.markdown-content ul,
+.markdown-content ol,
+.markdown-content table,
+.markdown-content blockquote {
+    margin-bottom: 1rem;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    padding-left: 1.4rem;
+}
+
+.markdown-content li + li {
+    margin-top: 0.35rem;
+}
+
+.markdown-content strong {
+    color: #2d3748;
+}
+
+.markdown-content table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.markdown-content th,
+.markdown-content td {
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem;
+    vertical-align: top;
+}
+
+.markdown-content th {
+    background: #eef4ff;
+    color: #24324a;
+    font-weight: 700;
+}
+
+.markdown-content blockquote {
+    border-left: 4px solid #667eea;
+    background: #f7f9ff;
+    padding: 0.75rem 1rem;
+    border-radius: 0 10px 10px 0;
 }
 
 /* 改进建议列表样式（review_result.html） */

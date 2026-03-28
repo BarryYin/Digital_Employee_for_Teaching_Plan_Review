@@ -5,6 +5,7 @@ import ssl
 import re
 import logging
 import time
+import os
 from urllib.parse import urlparse
 
 # 从配置文件导入API相关变量
@@ -13,7 +14,7 @@ from config import API_FLOW_ID, API_KEY, API_SECRET, XUN_FEI_URL
 # ssl._create_default_https_context = ssl._create_unverified_context
 
 DEFAULT_API_PATH = "/workflow/v1/chat/completions"
-REQUEST_TIMEOUT_SECONDS = 300
+REQUEST_TIMEOUT_SECONDS = int(os.getenv("REQUEST_TIMEOUT_SECONDS", "120"))
 logger = logging.getLogger(__name__)
 
 def _build_connection():
@@ -106,6 +107,27 @@ def call_api(payload):
     return result
 
 
+def _mask_error_reason(reason):
+    message = (reason or "").strip()
+    if not message:
+        return ""
+
+    lowered = message.lower()
+    if "timed out" in lowered or "timeout" in lowered:
+        return "评审工作流响应超时"
+    if "authorization" in lowered or "401" in lowered or "403" in lowered:
+        return "评审工作流鉴权失败"
+    if "connection refused" in lowered:
+        return "评审工作流服务未启动"
+    if "nodename nor servname" in lowered or "name or service not known" in lowered:
+        return "评审工作流地址配置无效"
+    if "api business error" in lowered:
+        return "评审工作流返回业务错误"
+    if "api response is not valid json" in lowered:
+        return "评审工作流返回格式异常"
+    return "评审工作流暂时不可用"
+
+
 def compose_payload(review_type, title="", grade="", content=""):
     user_input = "请根据提供的结构化字段评审教案，并返回 JSON 结果。"
 
@@ -163,6 +185,24 @@ def _parse_agent_json_content(raw_text):
 def _split_sentences(text):
     parts = re.split(r"(?<=[。；;!?！？])", text or "")
     return [part.strip() for part in parts if part and part.strip()]
+
+
+def _extract_suggestion_block(review_text):
+    content = (review_text or "").strip()
+    if not content:
+        return ""
+
+    patterns = (
+        r'(?:^|\n)#{1,6}\s*(?:[一二三四五六七八九十]+[、.]\s*)?(?:综合改进建议|优先改进建议|改进建议)\s*(.*?)(?=\n(?:---\s*)?\n#{1,6}\s*|\Z)',
+        r'(?:综合改进建议|优先改进建议|改进建议)[：:]\s*(.*?)(?=\n(?:总结|结语|结论)|\Z)',
+    )
+
+    for pattern in patterns:
+        match = re.search(pattern, content, flags=re.S | re.I)
+        if match:
+            return match.group(1).strip()
+
+    return ""
 
 
 def _estimate_score_from_text(review_text, content):
@@ -236,12 +276,13 @@ def _build_plaintext_review_result(raw_text, content):
     if not review_text:
         raise ValueError("Empty content returned from review API")
 
-    sentences = _split_sentences(review_text)
-    suggestion = ""
-    for sentence in sentences:
-        if "建议" in sentence:
-            suggestion = sentence
-            break
+    suggestion = _extract_suggestion_block(review_text)
+    if not suggestion:
+        sentences = _split_sentences(review_text)
+        for sentence in sentences:
+            if "建议" in sentence:
+                suggestion = sentence
+                break
 
     if not suggestion:
         suggestion = "建议补充教学目标、教学活动和评价方式之间的对应关系，并进一步细化课堂实施步骤。"
@@ -290,7 +331,7 @@ def _fallback_review_result(content, reason=""):
         score = 62
 
     review_result = (
-        "评审服务当前不稳定，已为你生成本地兜底评审结果。"
+        "评审服务当前不可用，已为你生成本地兜底评审结果。"
         "你的教案框架基本完整，建议继续加强教学目标、活动设计与评价闭环。"
     )
 
@@ -300,6 +341,6 @@ def _fallback_review_result(content, reason=""):
     )
 
     if reason:
-        review_result += f"（原因：{reason[:80]}）"
+        review_result += f"（提示：{_mask_error_reason(reason)}）"
 
     return score, review_result, suggestion
